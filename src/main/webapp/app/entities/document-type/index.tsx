@@ -2,6 +2,8 @@ import React from 'react';
 import { Route } from 'react-router';
 
 import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
+import PrivateRoute from 'app/shared/auth/private-route';
+import { Authority } from 'app/shared/jhipster/constants';
 
 import DocumentType from './document-type';
 import DocumentTypeDeleteDialog from './document-type-delete-dialog';
@@ -11,11 +13,32 @@ import DocumentTypeUpdate from './document-type-update';
 const DocumentTypeRoutes = () => (
   <ErrorBoundaryRoutes>
     <Route index element={<DocumentType />} />
-    <Route path="new" element={<DocumentTypeUpdate />} />
+    <Route
+      path="new"
+      element={
+        <PrivateRoute hasAnyAuthorities={[Authority.ADMIN, Authority.USER]}>
+          <DocumentTypeUpdate />
+        </PrivateRoute>
+      }
+    />
     <Route path=":id">
       <Route index element={<DocumentTypeDetail />} />
-      <Route path="edit" element={<DocumentTypeUpdate />} />
-      <Route path="delete" element={<DocumentTypeDeleteDialog />} />
+      <Route
+        path="edit"
+        element={
+          <PrivateRoute hasAnyAuthorities={[Authority.ADMIN, Authority.SUPERVISOR]}>
+            <DocumentTypeUpdate />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="delete"
+        element={
+          <PrivateRoute hasAnyAuthorities={[Authority.ADMIN]}>
+            <DocumentTypeDeleteDialog />
+          </PrivateRoute>
+        }
+      />
     </Route>
   </ErrorBoundaryRoutes>
 );
