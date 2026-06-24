@@ -13,6 +13,7 @@ import { Brand, Home } from './header-components';
 export interface IHeaderProps {
   isAuthenticated: boolean;
   isAdmin: boolean;
+  isSupervisor: boolean;
   ribbonEnv: string;
   isInProduction: boolean;
   isOpenAPIEnabled: boolean;
@@ -49,7 +50,7 @@ const Header = (props: IHeaderProps) => {
         <Navbar.Collapse id="header-tabs">
           <Nav className="ms-auto">
             <Home />
-            {props.isAuthenticated && <EntitiesMenu />}
+            {props.isAuthenticated && (props.isAdmin || props.isSupervisor) && <EntitiesMenu />}
             {props.isAuthenticated && props.isAdmin && <AdminMenu showOpenAPI={props.isOpenAPIEnabled} />}
             <AccountMenu isAuthenticated={props.isAuthenticated} />
           </Nav>
