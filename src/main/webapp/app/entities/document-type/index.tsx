@@ -16,7 +16,7 @@ const DocumentTypeRoutes = () => (
     <Route
       path="new"
       element={
-        <PrivateRoute hasAnyAuthorities={[Authority.ADMIN, Authority.USER]}>
+        <PrivateRoute hasAnyAuthorities={[Authority.ADMIN, Authority.USER, Authority.SUPERVISOR]}>
           <DocumentTypeUpdate />
         </PrivateRoute>
       }
