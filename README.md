@@ -97,3 +97,7 @@ Unit tests are run by Jest. They're located near components and can be run with:
 - [Jest](https://jestjs.io)
 - [Leaflet](https://leafletjs.com/)
 - [DefinitelyTyped](https://definitelytyped.org/)
+
+## ingresar al cliente
+
+http://localhost:8080/tienda/index.html
