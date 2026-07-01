@@ -10,7 +10,21 @@ const { merge } = require('webpack-merge');
 const environment = require('./environment');
 const utils = require('./utils.js');
 
+const useThreadLoader = process.env.JHI_DISABLE_THREAD_LOADER !== 'true';
+
 const getTsLoaderRule = () => {
+  const tsLoader = {
+    loader: 'ts-loader',
+    options: {
+      transpileOnly: true,
+      happyPackMode: true,
+    },
+  };
+
+  if (!useThreadLoader) {
+    return [tsLoader];
+  }
+
   return [
     {
       loader: 'thread-loader',
@@ -21,13 +35,7 @@ const getTsLoaderRule = () => {
         workers: require('os').cpus().length - 1,
       },
     },
-    {
-      loader: 'ts-loader',
-      options: {
-        transpileOnly: true,
-        happyPackMode: true,
-      },
-    },
+    tsLoader,
   ];
 };
 
@@ -46,7 +54,6 @@ module.exports = async options => {
             path.resolve(__dirname, `webpack.${development ? 'dev' : 'prod'}.js`),
             path.resolve(__dirname, 'environment.js'),
             path.resolve(__dirname, 'utils.js'),
-            path.resolve(__dirname, '../postcss.config.ts'),
             path.resolve(__dirname, '../tsconfig.json'),
           ],
         },

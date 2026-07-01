@@ -5,6 +5,7 @@ const WorkboxPlugin = require('workbox-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const sass = require('sass');
+const autoprefixer = require('autoprefixer');
 
 const utils = require('./utils.js');
 const commonConfig = require('./webpack.common.js');
@@ -40,6 +41,12 @@ module.exports = async () =>
             },
             {
               loader: 'postcss-loader',
+              options: {
+                postcssOptions: {
+                  config: false,
+                  plugins: [autoprefixer()],
+                },
+              },
             },
             {
               loader: 'sass-loader',

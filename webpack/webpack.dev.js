@@ -3,6 +3,7 @@ const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin');
 const WebpackNotifierPlugin = require('webpack-notifier');
 const path = require('node:path');
+const autoprefixer = require('autoprefixer');
 
 const sass = require('sass');
 
@@ -10,6 +11,7 @@ const utils = require('./utils.js');
 const commonConfig = require('./webpack.common.js');
 
 const ENV = 'development';
+const useWebpackNotifier = process.env.JHI_DISABLE_WEBPACK_NOTIFIER !== 'true';
 
 module.exports = async options =>
   webpackMerge(await commonConfig({ env: ENV }), {
@@ -36,6 +38,12 @@ module.exports = async options =>
             },
             {
               loader: 'postcss-loader',
+              options: {
+                postcssOptions: {
+                  config: false,
+                  plugins: [autoprefixer()],
+                },
+              },
             },
             {
               loader: 'sass-loader',
@@ -97,9 +105,11 @@ module.exports = async options =>
           reload: false,
         },
       ),
-      new WebpackNotifierPlugin({
-        title: 'Abcommerce',
-        contentImage: path.join(__dirname, 'logo-jhipster.png'),
-      }),
+      useWebpackNotifier
+        ? new WebpackNotifierPlugin({
+            title: 'Abcommerce',
+            contentImage: path.join(__dirname, 'logo-jhipster.png'),
+          })
+        : null,
     ].filter(Boolean),
   });
